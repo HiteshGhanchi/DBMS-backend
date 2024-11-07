@@ -53,6 +53,10 @@ const eventInformation = async (req, res) => {
     }
 };
 
-
+const disqualifiedAthleteForEvent = async(req,res) => {
+    const {eventId} = req.body;
+    const [rows] = await pool.query("SELECT * FROM disqualification WHERE eventId = ?",[eventId]);
+    return res.status(200).json(rows);
+}
   
-export {createEvent,updateEvent,deleteEvent,eventInformation}
+export {createEvent,updateEvent,deleteEvent,eventInformation,disqualifiedAthleteForEvent}
