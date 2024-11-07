@@ -7,7 +7,20 @@ const getAllAthletes = async(req,res) =>{
 
 const getAlthleteById = async(req,res) =>{
     const {id} = req.params;
-    const [rows] = await pool.query("SELECT * FROM athlete WHERE PlayerId = ?",[id]);
+    const [rows] = await pool.query(`SELECT 
+            athlete.PlayerId, 
+            athlete.name AS athleteName, 
+            athlete.DOB, 
+            athlete.Height, 
+            athlete.Weight,
+            country.name AS countryName, 
+            sport.name AS sportName, 
+            coach.name AS coachName
+            FROM athlete
+            JOIN country ON athlete.countryId = country.countryId
+            JOIN sport ON athlete.sportId = sport.sportId
+            JOIN coach ON athlete.coachId = coach.coachId
+            WHERE athlete.PlayerId = ?`,[id]);
     if(rows.length === 0)
         return res.status(404).json({message:"Athlete not found"});
     
@@ -62,6 +75,14 @@ const getAthleteHistory = async(req,res) =>{
     return res.status(200).json(rows);
 }
 
+const getAllEventsForAthlete = async(req,res) => {
+    const {id} = req.params;
+    const [rows] = await pool.query(`SELECT * FROM athlete_event JOIN events ON events.eventId = athlete_event.eventId where PlayerId = ? `,[id]);
+    if(rows.length === 0)
+        return res.status(404).json({message:"Athlete events not found"});
+    return res.status(200).json(rows);
+}
+
 
 export {getAllAthletes,
         getAlthleteById,
@@ -69,4 +90,5 @@ export {getAllAthletes,
         updateAthlete,
         deleteAthlete,
         getAthleteHistory,
+        getAllEventsForAthlete
     }
