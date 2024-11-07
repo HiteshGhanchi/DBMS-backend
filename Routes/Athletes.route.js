@@ -4,6 +4,7 @@ import {
     createAthlete,
     updateAthlete,
     deleteAthlete,
+    getAthleteHistory
 
 } from "../Controllers/Athletes.controller.js";
 import Router from "express";
@@ -14,6 +15,6 @@ route.get("/:id",getAlthleteById);
 route.post("/",createAthlete);
 route.put("/:id",updateAthlete);
 route.delete("/:id",deleteAthlete);
-
+route.get("/history/:id",getAthleteHistory);
 
 export default route;

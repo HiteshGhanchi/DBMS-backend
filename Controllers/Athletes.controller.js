@@ -15,15 +15,15 @@ const getAlthleteById = async(req,res) =>{
 }
 
 const createAthlete = async(req,res) =>{
-const {Name , DOB,Height,Weight,SportId,coachId,countryId} = req.body;
+    const {Name , DOB,Height,Weight,SportId,coachId,countryId} = req.body;
 
-const [rows] = await pool.query("INSERT INTO athlete (Name, DOB,Height,Weight,SportId,coachId,countryId) VALUES (?,?,?,?,?,?,?)",[Name , DOB,Height,Weight,SportId,coachId,countryId]);
+    const [rows] = await pool.query("INSERT INTO athlete (Name, DOB,Height,Weight,SportId,coachId,countryId) VALUES (?,?,?,?,?,?,?)",[Name , DOB,Height,Weight,SportId,coachId,countryId]);
 
-if(rows.affectedRows > 0){
-    return res.status(200).json({message:"Athlete created successfully"});
-}
+    if(rows.affectedRows > 0){
+        return res.status(200).json({message:"Athlete created successfully"});
+    }
 
-return res.status(500).json({message:"Athlete could not be created"});
+    return res.status(500).json({message:"Athlete could not be created"});
 
 }
 
@@ -54,7 +54,13 @@ const deleteAthlete = async(req,res) =>{
     return res.status(500).json({message:"Athlete could not be deleted"});
 }
 
-
+const getAthleteHistory = async(req,res) =>{
+    const {id} = req.params;
+    const [rows] = await pool.query("SELECT * FROM athlete_history WHERE PlayerId = ?",[id]);
+    if(rows.length === 0)
+        return res.status(404).json({message:"Athlete history not found"});
+    return res.status(200).json(rows);
+}
 
 
 export {getAllAthletes,
@@ -62,4 +68,5 @@ export {getAllAthletes,
         createAthlete,
         updateAthlete,
         deleteAthlete,
+        getAthleteHistory,
     }
