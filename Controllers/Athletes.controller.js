@@ -1,7 +1,11 @@
 import pool from "../connectDB.js";
 
 const getAllAthletes = async(req,res) =>{
-    const [rows] = await pool.query("SELECT * FROM athlete");
+    const [rows] = await pool.query(`SELECT athlete.PlayerId, 
+            athlete.name AS Name, 
+            athlete.DOB, 
+            athlete.Height, 
+            athlete.Weight,sport.name AS sportName,country.name AS countryName FROM athlete JOIN sport ON athlete.sportId = sport.sportId JOIN country ON athlete.countryId = country.countryId`);
     return res.status(200).json(rows);
 }
 

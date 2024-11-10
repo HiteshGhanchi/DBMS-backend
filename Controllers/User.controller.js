@@ -14,22 +14,25 @@ const createAccessToken = (payload) =>{
 
 const userLogin = async(req,res) =>{
     const {email,password} = req.body;
+    if(!email){
+        return res.status(400).json({emailError:"Please enter email"});
+    }
 
-    if(!email || !password){
-        return res.status(400).json({message:"Please enter all the fields"});
+    if(!password){
+        return res.status(400).json({passwordError:"Please enter password"});
     }
 
     const [rows] = await pool.query("SELECT * FROM users WHERE email = ?",[email]);
 
     if(rows.length < 1){
-        return res.status(400).json({message:"User does not exist"});
+        return res.status(400).json({emailError:"No such user exists"});
     }
 
     const hashPassword = rows[0].password;
     const validPassword = await bcrypt.compare(password,hashPassword);
 
     if(!validPassword){
-        return res.status(400).json({message:"Invalid password"});
+        return res.status(400).json({passwordError:"Invalid password"});
     }
 
     const token = createAccessToken({email:rows[0].email,name:rows[0].name,phone:rows[0].phone});
@@ -40,14 +43,23 @@ const userLogin = async(req,res) =>{
 const userRegister = async(req,res) =>{
     const {email,password,name,phone} = req.body;
 
-    if(!email || !password || !name || !phone){
-        return res.status(400).json({message:"Please enter all the fields"})
-    }
+    if(!email)
+        return res.status(400).json({emailError:"Please enter email"});
+    
+    if(!password)
+        return res.status(400).json({passwordError:"Please enter password"});
+
+    if(!name)
+        return res.status(400).json({nameError:"Please enter name"});
+
+    if(!phone)
+        return res.status(400).json({phoneError:"Please enter phone"});
+    
 
     const [rows] = await pool.query("SELECT * FROM users WHERE email = ?",[email]);
 
     if(rows.length > 0){
-        return res.status(400).json({message:"User already exists"})
+        return res.status(400).json({emailError:"User already exists"})
     }
     const hashPassword = await hashpassword(password);
 

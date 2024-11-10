@@ -1,5 +1,15 @@
 import pool from "../connectDB.js";
 
+
+const getUpcomingTournaments = async(req,res) => {
+    try{
+        const [rows] = await pool.query("SELECT * FROM tournaments WHERE start_date > CURDATE()");
+        return res.status(200).json(rows);
+    }
+    catch(err){
+        return res.status(500).json({message:"Internal Server Error"});
+    }
+}
 const getAllTournaments = async(req,res) => {
     const [rows] = await pool.query("SELECT * FROM tournaments");
     return res.status(200).json(rows);
@@ -66,5 +76,6 @@ export {
     updateTournament,
     deleteTournament,
     getAllEventsfromTournament,
-    getStandingsForTournament
+    getStandingsForTournament,
+    getUpcomingTournaments
 }

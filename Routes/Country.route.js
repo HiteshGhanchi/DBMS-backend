@@ -4,7 +4,7 @@ import {getAllCountries,getCountryById,createCountry,deleteCountry} from "../Con
 
 const route = Router();
 
-route.get("/",Auth,getAllCountries);
+route.get("/",getAllCountries);
 route.get("/:id",getCountryById);
 route.post("/",Auth,createCountry);
 route.delete("/:id",Auth,deleteCountry);

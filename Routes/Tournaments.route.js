@@ -8,10 +8,12 @@ import { getAllTournaments,
         updateTournament,
         deleteTournament,
         getAllEventsfromTournament,
-        getStandingsForTournament
+        getStandingsForTournament,
+        getUpcomingTournaments
     } from "../Controllers/Tournaments.controller.js";
 
 route.get("/",getAllTournaments);
+route.get("/upcoming",getUpcomingTournaments);
 route.get("/:id",getTournamentById);
 route.post("/",Auth,createTournament);
 route.put("/:id",Auth,updateTournament);
