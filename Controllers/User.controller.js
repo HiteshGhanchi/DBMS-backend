@@ -9,7 +9,7 @@ const hashpassword = async(password) =>{
 }
 
 const createAccessToken = (payload) =>{
-    return jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET, {expiresIn:"1h"});
+    return jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET, {expiresIn:"1d"});
 }
 
 const userLogin = async(req,res) =>{

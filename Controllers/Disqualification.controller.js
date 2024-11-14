@@ -1,6 +1,7 @@
 import pool from "../connectDB.js";
 
 const getAllDisqualified = async (req, res) => {
+    // console.log("hi");
     const [rows] = await pool.query("SELECT * FROM disqualification");
     return res.status(200).json(rows);
 };
